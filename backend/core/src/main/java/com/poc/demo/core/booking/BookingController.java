@@ -24,19 +24,21 @@ public class BookingController {
     @PostMapping("/bookings")
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
         log.info("Creating new Booking: {}", booking);
-        Waypoint waypoint = booking.getWaypoint();
-        booking.setWaypoint(null);
-        Booking newBooking = this.bookingService.saveBooking(booking);
-        waypoint.setBooking(newBooking);
-        newBooking.setWaypoint(waypoint);
-        return new ResponseEntity<>(this.bookingService.saveBooking(newBooking), HttpStatus.OK);
+        return new ResponseEntity<>(this.bookingService.saveBooking(booking), HttpStatus.OK);
     }
 
     @PutMapping("/bookings/{id}")
     public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking,
                                                  @PathVariable(name = "id") final Long id) {
         log.info("Updating  Booking: {}", booking);
-        return new ResponseEntity<>(this.bookingService.saveBooking(booking), HttpStatus.OK);
+        return new ResponseEntity<>(this.bookingService.updateBooking(booking), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/bookings/{id}")
+    public ResponseEntity<String> deleteBooking( @PathVariable(name = "id") final Long id) {
+        log.info("Deleting  Booking: {}", id);
+        this.bookingService.delete(id);
+        return new ResponseEntity<>("Booking deleted", HttpStatus.OK);
     }
 
 

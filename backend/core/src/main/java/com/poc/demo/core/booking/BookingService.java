@@ -1,8 +1,8 @@
 package com.poc.demo.core.booking;
 
+import com.poc.demo.core.waypoint.Waypoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +28,23 @@ public class BookingService {
     }
 
     public Booking saveBooking(Booking booking) {
+        Waypoint waypoint = booking.getWaypoint();
+        booking.setWaypoint(null);
+        Booking newBooking = this.bookingRepository.save(booking);
+        waypoint.setBooking(newBooking);
+        newBooking.setWaypoint(waypoint);
+        return this.bookingRepository.save(booking);
+    }
+
+    public Booking updateBooking(Booking booking) {
         return this.bookingRepository.save(booking);
     }
 
     public Long getBookingsCount() {
         return bookingRepository.count();
+    }
+
+    public void delete(Long id) {
+        this.bookingRepository.deleteById(id);
     }
 }

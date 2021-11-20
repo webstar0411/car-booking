@@ -5,6 +5,7 @@ import com.poc.demo.core.waypoint.Waypoint;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -15,7 +16,9 @@ import java.time.LocalTime;
 
 @Entity(name = "bookings")
 @Data
-public class Booking {
+public class Booking implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

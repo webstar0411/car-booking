@@ -1,11 +1,11 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BookingsDataSourceService} from '../../services/bookings-data-source.service';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSort, SortDirection} from '@angular/material/sort';
-import {fromEvent, merge} from 'rxjs';
+import {MatSort, Sort, SortDirection} from '@angular/material/sort';
+import {BehaviorSubject, fromEvent, merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {Booking} from '../../models/booking';
+import {TableOptions} from '../../models/table-options';
 
 interface ColOptions {
   isDateTime: boolean;
@@ -50,10 +50,19 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   // @ts-ignore
   @ViewChild('input', {static: true}) search!: ElementRef;
 
+
+  readonly tableOptions: TableOptions = {
+    filter: new BehaviorSubject(''),
+    page: new BehaviorSubject({pageIndex: 0, pageSize: 2, previousPageIndex: 0} as PageEvent),
+    sort: new BehaviorSubject({active: 'id', direction: 'asc'} as Sort)
+  };
+  readonly totalItems$: BehaviorSubject<number>;
+
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private bookingsDataSourceService: BookingsDataSourceService) {
     this.dataSource = bookingsDataSourceService;
+    this.totalItems$ = bookingsDataSourceService.totalCount$;
   }
 
   get displayedColumns(): string[] {
@@ -64,12 +73,8 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.totalItems = this.activatedRoute.snapshot.data.totalBookings;
-    this.dataSource.load(this.defaultOptions.FILTER,
-      this.defaultOptions.SORT_FIELD,
-      this.defaultOptions.SORT_ORDER,
-      0,
-      this.defaultOptions.PAGE_SIZE);
+    this.totalItems$.next(this.activatedRoute.snapshot.data.totalBookings);
+    this.dataSource.load(this.tableOptions);
   }
 
 
@@ -83,44 +88,18 @@ export class BookingsComponent implements OnInit, AfterViewInit {
     merge(search$, this.sort.sortChange)
       .subscribe((d) => this.paginator.pageIndex = 0);
 
-    // fetch data
-    merge(search$, this.sort.sortChange, this.paginator.page)
-      .subscribe(_ => this.loadPage());
-  }
+    // @ts-ignore
+    search$.subscribe(_ => this.tableOptions.filter.next(this.search.nativeElement.value));
+    this.sort.sortChange.subscribe(sort => this.tableOptions.sort.next(sort));
+    this.paginator.page.subscribe(page => this.tableOptions.page.next(page));
 
-
-  private loadPage(): void {
-    this.dataSource.load(
-      this.search.nativeElement.value,
-      this.sort.active,
-      this.sort.direction,
-      this.paginator.pageIndex,
-      this.paginator.pageSize);
   }
 
   edit(id: string): void {
     this.router.navigate(['/bookings', id, 'edit']);
   }
 
-  clone(booking: Booking): void {
-    this.bookingsService.clone(booking).subscribe(
-      res => {
-        this.userMsgService.ok('Booking cloned, your data table is outdated.');
-      },
-      err => this.userMsgService.error('Fail to clone Booking'),
-      () => console.log('HTTP request completed.')
-    );
-  }
 
-  delete(booking: Booking): void {
-    this.bookingsService.delete(booking).subscribe(
-      res => {
-        this.userMsgService.ok('Booking deleted, your datatable is outdated.');
-      },
-      err => this.userMsgService.error('Fail to delete Booking'),
-      () => console.log('HTTP request completed.')
-    );
-  }
 }
 
 

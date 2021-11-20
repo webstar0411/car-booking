@@ -76,9 +76,6 @@ export class OperationsBooking {
     return false;
   }
 
-  clone(): void {
-  }
-
   delete(): void {
   }
 

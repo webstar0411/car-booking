@@ -35,7 +35,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/bookings/{id}")
-    public ResponseEntity<Object> deleteBooking( @PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Object> deleteBooking(@PathVariable(name = "id") final Long id) {
         log.info("Deleting  Booking: {}", id);
         this.bookingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -71,7 +71,6 @@ public class BookingController {
         }
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
-
 
 
     @GetMapping("/bookings/count")

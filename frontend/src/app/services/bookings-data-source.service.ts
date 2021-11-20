@@ -11,9 +11,8 @@ import {TableOptions} from '../models/table-options';
 @Injectable()
 export class BookingsDataSourceService implements DataSource<Booking> {
   public readonly loading$ = new BehaviorSubject<boolean>(false);
-  private bookings$ = new BehaviorSubject<Booking[]>([]);
-
   readonly totalCount$ = new BehaviorSubject(1);
+  private bookings$ = new BehaviorSubject<Booking[]>([]);
   private subscriptions: Subscription[] = [];
 
   constructor(@Inject(BOOKINGS_PAGINATOR) private paginatorRef: PaginatorPlugin<Booking>,

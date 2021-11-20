@@ -6,11 +6,12 @@ import {Pipe, PipeTransform} from '@angular/core';
 export class DateToTimepickerPipe implements PipeTransform {
 
   transform(value: string, ...args: any[]): string {
-    if (value === null) {
+    try {
+      const date = new Date(value);
+      return `${date.getHours()}:${date.getMinutes()}`;
+    } catch (e) {
       return '00:00';
     }
-    const date = new Date(value);
-    return `${date.getHours()}:${date.getMinutes()}`;
   }
 
 }

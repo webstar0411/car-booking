@@ -1,5 +1,6 @@
 <div class="homepage">
   <div class="homepage__uri">
+    <h3>Backend protocol</h3>
     <div class="homepage__uri_options">
       <button class="homepage__uri_options_label" mat-flat-button>Backend Protocol:</button>
       <mat-button-toggle-group [value]="backendProtocol()">
@@ -13,5 +14,19 @@
       - AMQ: requests will be forward to RabbitMQ interface<br/>
       ** AMQ requests will return success if producer success forwards MSG to consumers
     </div>
+  </div>
+
+  <div class="homepage__description">
+    <h3>Functionality</h3>
+    <span class="homepage__description_line">
+      * Interface for CRUD operations on Booking items</span>
+    <span class="homepage__description_line">
+      * Table supports: server side Paging, Sorter and Filter</span>
+    <span class="homepage__description_line">
+      * From Table users can access Edit page</span>
+    <span class="homepage__description_line">
+      * Edit page actions: Edit, Delete, Clone</span>
+    <span class="homepage__description_line">
+      * State management: Akita is used as state management</span>
   </div>
 </div>

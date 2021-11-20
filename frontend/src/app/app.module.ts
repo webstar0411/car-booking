@@ -31,6 +31,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {RestAmqInterceptor} from './interceptors/rest-amq.interceptor';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {DateToTimepickerPipe} from './pipes/date-to-timepicker.pipe';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [

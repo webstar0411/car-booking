@@ -1,14 +1,10 @@
 <mat-toolbar class="cars-header">
   <div class="cars-header__name">eBookings</div>
-  <nav mat-tab-nav-bar mat-align-tabs="center" class="cars-header__nav">
-      <a mat-tab-link routerLink="/">Home</a>
-      <a mat-tab-link routerLink="/bookings">bookings</a>
-      <a mat-tab-link routerLink="/create">Create</a>
-  </nav>
-  <button mat-button class="cars-header__profile" [matMenuTriggerFor]="menu">
+  <cars-header-navbar></cars-header-navbar>
+  <button [matMenuTriggerFor]="menu" class="cars-header__profile" mat-button>
     <div class="cars-header__profile_group">
-    <span class="cars-header__profile_group_name">User</span>
-    <span class="cars-header__profile_group_avatar">UR</span>
+      <span class="cars-header__profile_group_name">User</span>
+      <span class="cars-header__profile_group_avatar">U</span>
     </div>
   </button>
 </mat-toolbar>

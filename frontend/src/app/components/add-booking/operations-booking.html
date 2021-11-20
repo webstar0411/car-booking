@@ -2,7 +2,7 @@
 
   <label class="book_form__label">Booking</label>
   <section class="book_form__group">
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Name</mat-label>
       <mat-icon matPrefix>face</mat-icon>
       <input formControlName="name"
@@ -15,9 +15,9 @@
       <mat-error>This field is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Phone Number</mat-label>
-      <button mat-flat-button matPrefix class="phone-prefix">+351 &nbsp;</button>
+      <button class="phone-prefix" mat-flat-button matPrefix>+351 &nbsp;</button>
       <input formControlName="phone"
              matInput
 
@@ -29,22 +29,22 @@
     </mat-form-field>
   </section>
 
-  <section class="book_form__group" >
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+  <section class="book_form__group">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Pickup Time</mat-label>
       <mat-icon matPrefix>alarm_add</mat-icon>
-      <input formControlName="pickup_time"
+      <input [format]="24"
+             [ngxTimepicker]="picker"
+             formControlName="pickup_time"
              matInput
              placeholder="pickup time"
-             required
-             type="text"
-             [format]="24" [ngxTimepicker]="picker"
+             required type="text"
       />
       <mat-error>This field is required</mat-error>
       <ngx-material-timepicker #picker></ngx-material-timepicker>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Waiting Time</mat-label>
       <mat-icon matPrefix>alarm_on</mat-icon>
       <input formControlName="waiting_time"
@@ -56,7 +56,7 @@
     </mat-form-field>
 
     <section class="book_form__group_item">
-      <mat-checkbox formControlName="asap" >
+      <mat-checkbox formControlName="asap">
         ASAP
       </mat-checkbox>
     </section>
@@ -65,7 +65,7 @@
 
   <section class="book_form__group">
 
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Number of Passengers</mat-label>
       <mat-icon matPrefix>supervisor_account</mat-icon>
       <input formControlName="number_of_passengers"
@@ -78,7 +78,7 @@
       <mat-error>This field is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Price</mat-label>
       <mat-icon matPrefix>€&nbsp;</mat-icon>
       <input formControlName="price"
@@ -90,7 +90,7 @@
       <mat-error>This field is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+    <mat-form-field [appearance]="bookingAppearance" class="book_form__group_item">
       <mat-label>Rating</mat-label>
       <mat-icon matPrefix>eco</mat-icon>
       <input formControlName="rating"
@@ -108,7 +108,7 @@
   <section class="  waypoint_section" formGroupName="waypoint">
 
 
-    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+    <mat-form-field [appearance]="waypointAppearance" class="book_form__group_item">
       <mat-label>Locality</mat-label>
       <input formControlName="locality"
              matInput
@@ -119,7 +119,7 @@
       <mat-error>This field is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+    <mat-form-field [appearance]="waypointAppearance" class="book_form__group_item">
       <mat-label>Latitude</mat-label>
       <input formControlName="latitude"
              matInput
@@ -129,7 +129,7 @@
       <mat-error>This field is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+    <mat-form-field [appearance]="waypointAppearance" class="book_form__group_item">
       <mat-label>Longitude</mat-label>
       <input formControlName="longitude"
              matInput
@@ -142,14 +142,11 @@
   </section>
 
 
-
   <div class="buttons book_form__group">
-    <button [disabled]="disableButton()" color="primary" mat-raised-button type="submit">Submit</button>
-    <button (click)="resetForm()" *ngIf="edit()" [disabled]="disableButton()" color="accent" mat-raised-button>Restore
-    </button>
-    <button (click)="clone()" *ngIf="edit()" color="accent" mat-raised-button>Clone</button>
-    <button (click)="delete()" *ngIf="edit()" color="accent" mat-raised-button>Delete</button>
+    <button color="primary" mat-raised-button type="submit">Submit</button>
+    <button (click)="resetForm()" *ngIf="edit()" color="accent" mat-raised-button type="button">Restore</button>
+    <button (click)="clone()" *ngIf="edit()" color="accent" mat-raised-button type="button">Clone</button>
+    <button (click)="delete()" *ngIf="edit()" color="accent" mat-raised-button type="button">Delete</button>
     <button *ngIf="!edit()" color="accent" mat-raised-button type="reset">Reset</button>
-    <button (click)="resetForm()" *ngIf="edit()" color="accent" mat-raised-button>Restore</button>
   </div>
 </form>

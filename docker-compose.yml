@@ -43,7 +43,7 @@ services:
       - cars-network
 
   rabbit:
-    image: rabbitmq:latest
+    image: rabbitmq:3.8.14-management
     container_name: rabbit
     ports:
       - 15672:15672

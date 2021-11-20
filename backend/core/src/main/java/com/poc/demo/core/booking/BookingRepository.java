@@ -18,4 +18,7 @@ public interface BookingRepository extends CrudRepository<Booking, Long> {
 
     @Override
     void deleteById(Long aLong);
+
+    @Override
+    long count();
 }

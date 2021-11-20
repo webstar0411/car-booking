@@ -1,0 +1,30 @@
+<div class="cars-bookings-table">
+  <mat-form-field>
+      <input #input matInput matNativeControl placeholder="Search booking">
+  </mat-form-field>
+
+  <div *ngIf="dataSource.loading$ | async" class="cars-bookings-table__spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-table [dataSource]="dataSource" [matSortActive]="defaultOptions.DEFAULT_SORT_FIELD"
+             [matSortDirection]="defaultOptions.SORT_ORDER" class="mat-elevation-z8"
+             matSort matSortDisableClear>
+
+    <ng-container *ngFor="let col of colDef">
+      <ng-container [matColumnDef]="col.id">
+        <mat-header-cell *matHeaderCellDef> {{col.name}} </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element[col.id]}} </mat-cell>
+      </ng-container>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row (click)="onRowClick(row)"
+             *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSizeOptions]="defaultOptions.PAGE_SIZE_OPTIONS"
+    [pageSize]="defaultOptions.PAGE_SIZE"></mat-paginator>
+</div>

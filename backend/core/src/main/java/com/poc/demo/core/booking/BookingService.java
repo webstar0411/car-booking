@@ -19,4 +19,8 @@ public class BookingService {
     public Iterable<Booking> getBookings() {
         return bookingRepository.findAll();
     }
+
+    public Long getBookingsCount() {
+        return bookingRepository.count();
+    }
 }

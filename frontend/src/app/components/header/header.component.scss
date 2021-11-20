@@ -1,0 +1,43 @@
+.cars-header {
+
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  &__nav {
+    display: flex;
+  }
+
+  &__span {
+
+  }
+
+  &__profile {
+    background-color: transparent !important;
+    height: 80%;
+    &_group {
+
+      align-items: center;
+      display: flex;
+      font-size: 1em;
+      flex-direction: row;
+
+      &_avatar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        color: black;
+        font-size: 18px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 16px;
+      }
+    }
+
+
+
+  }
+
+}

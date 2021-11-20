@@ -29,4 +29,11 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getBooking(id), HttpStatus.OK);
     }
 
+    @GetMapping("/bookings/count")
+    public ResponseEntity<Long> getBookingsCount() {
+        log.info("Getting number of bookings");
+
+        return new ResponseEntity<>(bookingService.getBookingsCount(), HttpStatus.OK);
+    }
+
 }

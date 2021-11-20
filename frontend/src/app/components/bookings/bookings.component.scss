@@ -1,0 +1,17 @@
+.cars-bookings-table {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+
+  &__spinner {
+
+    height: 80%;
+    width: 80%;
+    position: fixed;
+
+    mat-spinner {
+      margin: 130px auto 0 auto;
+    }
+  }
+
+}

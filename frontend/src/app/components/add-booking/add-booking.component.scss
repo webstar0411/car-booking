@@ -1,0 +1,59 @@
+mat-icon {
+  margin-right: 20px;
+}
+
+.phone-prefix {
+  margin-right: 10px;
+  background-color: transparent;
+  pointer-events: none;
+  align-content: center;
+}
+
+
+.book_form {
+  height: 100%;
+  margin: 30px 20px 50px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  &__label {
+    background-color: aliceblue;
+    padding: 5px 10px;
+  }
+
+
+  &__group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 30px;
+
+    justify-content: space-evenly;
+
+    &_item {
+      flex: 1;
+      padding: 0px 30px;
+    }
+  }
+}
+
+.buttons {
+  margin-top: 50px;
+}
+
+.waypoint_section {
+  display: flex;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.waypoint_label {
+  margin-left: 40px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  width: 100px;
+}

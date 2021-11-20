@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {BookingsService} from './bookings.service';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,9 @@ export class BookingsCountResolver implements Resolve<number> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<number> | Promise<number> | number {
-    return this.bookingsService.getBookingsCount();
+    return this.bookingsService.getBookingsCount()
+      .pipe(
+        catchError(_ => of(0))
+      );
   }
 }

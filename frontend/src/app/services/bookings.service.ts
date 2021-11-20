@@ -23,6 +23,10 @@ export class BookingsService extends BaseRequests {
     super();
   }
 
+  save(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(this.forUri('/bookings'), booking);
+  }
+
   getBookings(filter: string, sortField: string, sortDirection: string, pageNumber: number , pageSize: number): Observable<Booking[]> {
     return this.http.get<Booking[]>(this.forUri('/bookings'), {
       params: new HttpParams()

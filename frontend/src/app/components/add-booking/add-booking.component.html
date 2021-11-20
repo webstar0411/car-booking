@@ -1,0 +1,148 @@
+<form (ngSubmit)="submit()" [formGroup]="formGroup" class="book_form">
+
+  <label class="book_form__label">Booking</label>
+  <section class="book_form__group">
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Name</mat-label>
+      <mat-icon matPrefix>face</mat-icon>
+      <input formControlName="name"
+             matInput
+             placeholder="passenger name"
+             required
+             type="text"
+      />
+      <mat-hint>Enter Passenger Name</mat-hint>
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Phone Number</mat-label>
+      <button mat-flat-button matPrefix class="phone-prefix">+351 &nbsp;</button>
+      <input formControlName="phone"
+             matInput
+
+             placeholder="96 541 33 87"
+             required
+             type="text"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+  </section>
+
+  <section class="book_form__group" >
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Pickup Time</mat-label>
+      <mat-icon matPrefix>alarm_add</mat-icon>
+      <input formControlName="pickup_time"
+             matInput
+             placeholder="pickup time"
+             required
+             type="text"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Waiting Time</mat-label>
+      <mat-icon matPrefix>alarm_on</mat-icon>
+      <input formControlName="waiting_time"
+             matInput
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <section class="book_form__group_item">
+      <mat-checkbox formControlName="asap" >
+        ASAP
+      </mat-checkbox>
+    </section>
+  </section>
+
+
+  <section class="book_form__group">
+
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Number of Passengers</mat-label>
+      <mat-icon matPrefix>supervisor_account</mat-icon>
+      <input formControlName="number_of_passengers"
+             matInput
+             max="4"
+             min="1"
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Price</mat-label>
+      <mat-icon matPrefix>€&nbsp;</mat-icon>
+      <input formControlName="price"
+             matInput
+             min="1"
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">
+      <mat-label>Rating</mat-label>
+      <mat-icon matPrefix>eco</mat-icon>
+      <input formControlName="rating"
+             matInput
+             min="1"
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+  </section>
+
+
+  <label class="book_form__label  waypoint_label">Waypoint</label>
+  <section class="  waypoint_section" formGroupName="waypoint">
+
+
+    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+      <mat-label>Locality</mat-label>
+      <input formControlName="locality"
+             matInput
+             required
+             type="text"
+      />
+      <mat-hint>Enter Passenger Name</mat-hint>
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+      <mat-label>Latitude</mat-label>
+      <input formControlName="latitude"
+             matInput
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="book_form__group_item" [appearance]="waypointAppearance">
+      <mat-label>Longitude</mat-label>
+      <input formControlName="longitude"
+             matInput
+             required
+             type="number"
+      />
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+  </section>
+
+
+
+  <div class="buttons book_form__group">
+    <button color="primary" mat-raised-button type="submit">Submit</button>
+    <button color="accent" mat-raised-button type="reset">Reset</button>
+  </div>
+</form>

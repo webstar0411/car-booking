@@ -27,6 +27,10 @@ public class BookingService {
         return bookingRepository.findAllByNameContaining(filter, page);
     }
 
+    public Booking saveBooking(Booking booking) {
+        return this.bookingRepository.save(booking);
+    }
+
     public Long getBookingsCount() {
         return bookingRepository.count();
     }

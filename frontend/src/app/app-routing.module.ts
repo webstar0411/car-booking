@@ -3,10 +3,12 @@ import {RouterModule, Routes} from '@angular/router';
 import {BookingsComponent} from './components/bookings/bookings.component';
 import {BookingsCountResolver} from './services/bookings-count-resolver.service';
 import {HomePageComponent} from './components/home-page/home-page.component';
+import {AddBookingComponent} from './components/add-booking/add-booking.component';
 
 const routes: Routes = [
-  {path: '', component: HomePageComponent},
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomePageComponent},
+  {path: 'create', component: AddBookingComponent},
   {
     path: 'bookings', component: BookingsComponent,
     resolve: {

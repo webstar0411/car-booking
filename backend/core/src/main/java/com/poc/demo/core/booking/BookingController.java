@@ -1,5 +1,6 @@
 package com.poc.demo.core.booking;
 
+import com.poc.demo.core.waypoint.Waypoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,25 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+
+    @PostMapping("/bookings")
+    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
+        log.info("Creating new Booking: {}", booking);
+        Waypoint waypoint = booking.getWaypoint();
+        booking.setWaypoint(null);
+        Booking newBooking = this.bookingService.saveBooking(booking);
+        waypoint.setBooking(newBooking);
+        newBooking.setWaypoint(waypoint);
+        return new ResponseEntity<>(this.bookingService.saveBooking(newBooking), HttpStatus.OK);
+    }
+
+    @PutMapping("/bookings/{id}")
+    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking,
+                                                 @PathVariable(name = "id") final Long id) {
+        log.info("Updating  Booking: {}", booking);
+        return new ResponseEntity<>(this.bookingService.saveBooking(booking), HttpStatus.OK);
+    }
+
 
     @GetMapping("/bookings")
     public ResponseEntity<Iterable<Booking>> getBookings(

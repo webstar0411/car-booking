@@ -26,13 +26,13 @@ public class Waypoint implements Serializable {
 
 
     @Id
-    @Column(name = "booking_id")
+    @Column(name = "id")
     private Long id;
 
     @JsonIgnore
     @OneToOne
     @MapsId
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "id")
     private Booking booking;
 
 }

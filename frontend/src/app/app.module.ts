@@ -21,6 +21,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { AddBookingComponent } from './components/add-booking/add-booking.component';
+import { HeaderNavbarComponent } from './components/header-navbar/header-navbar.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -28,7 +33,10 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     HeaderComponent,
     FooterComponent,
     BookingsComponent,
-    HomePageComponent
+    HomePageComponent,
+    AddBookingComponent,
+    HeaderNavbarComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -46,9 +54,11 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     MatSortModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule,
+    MatCheckboxModule
   ],
-  providers: [],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule {

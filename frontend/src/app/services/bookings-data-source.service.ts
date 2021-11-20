@@ -13,9 +13,9 @@ export class BookingsDataSourceService implements DataSource<Booking> {
   constructor(private bookingsService: BookingsService) {
   }
 
-  load(filter: string, sortDirection: string, pageIndex: number, pageSize: number): void {
+  load(filter: string, sortField: string, sortDirection: string, pageIndex: number, pageSize: number): void {
     this.loading$.next(true);
-    this.bookingsService.getBookings(filter, sortDirection, pageIndex, pageSize)
+    this.bookingsService.getBookings(filter, sortField, sortDirection, pageIndex, pageSize)
       .pipe(
         catchError(() => of([])),
         finalize(() => this.loading$.next(false))

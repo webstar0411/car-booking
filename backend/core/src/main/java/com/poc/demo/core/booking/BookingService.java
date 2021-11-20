@@ -1,6 +1,9 @@
 package com.poc.demo.core.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,8 +19,12 @@ public class BookingService {
         return bookingRepository.findById(id);
     }
 
-    public Iterable<Booking> getBookings() {
-        return bookingRepository.findAll();
+    public Page<Booking> getBookings(Pageable page) {
+        return bookingRepository.findAll(page);
+    }
+
+    public Page<Booking> getBookingsFilterByName(String filter, Pageable page) {
+        return bookingRepository.findAllByNameContaining(filter, page);
     }
 
     public Long getBookingsCount() {

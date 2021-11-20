@@ -2,10 +2,14 @@ package com.poc.demo.core.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -17,10 +21,26 @@ public class BookingController {
     private BookingService bookingService;
 
     @GetMapping("/bookings")
-    public ResponseEntity<Iterable<Booking>> getBookings() {
-        log.info("Getting all bookings");
+    public ResponseEntity<Iterable<Booking>> getBookings(
+            @RequestParam(name = "filter") String filter,
+            @RequestParam(name = "sortField") String sortField,
+            @RequestParam(name = "sortOrder") String sortOrder,
+            @RequestParam(name = "pageNumber") Integer pageNumber,
+            @RequestParam(name = "pageSize") Integer pageSize
+    ) {
+        log.info("Getting all bookings: filter[{}],sortField[{}],sortOrder[{}],pageNumber[{}],pageSize[{}]",
+                filter, sortField, sortOrder, pageNumber, pageSize);
 
-        return new ResponseEntity<>(bookingService.getBookings(), HttpStatus.OK);
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<Booking> bookings;
+        if (!Objects.equals(filter, "")) {
+            bookings = bookingService.getBookingsFilterByName(filter, pageRequest);
+        } else {
+            bookings = bookingService.getBookings(pageRequest);
+        }
+        return new ResponseEntity<>(bookings.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/bookings/{id}")

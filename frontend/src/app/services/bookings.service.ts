@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {map, tap} from 'rxjs/operators';
+import {Booking} from '../models/booking';
 
 class BaseRequests {
   private readonly baseUrl: string = environment.backend.baseURL;
@@ -22,12 +23,19 @@ export class BookingsService extends BaseRequests {
     super();
   }
 
-  getBookings(filter: string, sortDirection: string, pageNumber = 0, pageSize = 2): Observable<any> {
-    return this.http.get(this.forUri('/bookings'));
+  getBookings(filter: string, sortField: string, sortDirection: string, pageNumber: number , pageSize: number): Observable<Booking[]> {
+    return this.http.get<Booking[]>(this.forUri('/bookings'), {
+      params: new HttpParams()
+        .set('filter', filter)
+        .set('sortField', sortField)
+        .set('sortOrder', sortDirection)
+        .set('pageNumber', pageNumber.toString())
+        .set('pageSize', pageSize.toString()),
+      responseType: 'json'
+    });
   }
 
   getBookingsCount(): Observable<number> {
-    return this.http.get(this.forUri('/bookings/count'))
-      .pipe(map(res => 5));
+    return this.http.get<number>(this.forUri('/bookings/count'));
   }
 }

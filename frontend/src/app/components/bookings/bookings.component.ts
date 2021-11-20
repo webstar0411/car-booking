@@ -1,12 +1,10 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {BookingsService} from '../../services/bookings.service';
 import {BookingsDataSourceService} from '../../services/bookings-data-source.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {fromEvent, merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {BookingsCountResolver} from '../../services/bookings-count-resolver.service';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 interface ColOptions {
   name: string;
@@ -16,20 +14,20 @@ interface ColOptions {
 const COL_DEF: ColOptions[] = [
   {id: 'id', name: 'ID'},
   {id: 'name', name: 'Name'},
-  {id: 'phone', name: 'Phone N.'},
+  {id: 'phone', name: 'Phone'},
   {id: 'price', name: 'Price'},
   {id: 'rating', name: 'Rating'},
   {id: 'pickup_time', name: 'Pickup'},
-  {id: 'waiting_time', name: 'Waiting(min)'},
+  {id: 'waiting_time', name: 'Waiting'},
   {id: 'waypoint?.locality', name: 'Location'},
 ];
 
 const TABLE_DEFAULT_OPTIONS = {
   PAGE_SIZE: 2,
   PAGE_SIZE_OPTIONS: [2, 5, 10],
+  SORT_FIELD: 'id',
   SORT_ORDER: 'asc' as SortDirection,
-  FILTER: '',
-  DEFAULT_SORT_FIELD: 'name'
+  FILTER: ''
 };
 
 
@@ -60,6 +58,7 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.totalItems = this.route.snapshot.data.totalBookings;
     this.dataSource.load(this.defaultOptions.FILTER,
+      this.defaultOptions.SORT_FIELD,
       this.defaultOptions.SORT_ORDER,
       0,
       this.defaultOptions.PAGE_SIZE);
@@ -78,16 +77,19 @@ export class BookingsComponent implements OnInit, AfterViewInit {
 
     // reset page sort
     merge(search$, this.sort.sortChange)
-      .subscribe(() => this.paginator.pageIndex = 0);
+      .subscribe((d) => this.paginator.pageIndex = 0);
 
     // fetch data
     merge(search$, this.sort.sortChange, this.paginator.page)
       .subscribe(_ => this.loadPage());
   }
 
+
+
   private loadPage(): void {
     this.dataSource.load(
       this.search.nativeElement.value,
+      this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize);

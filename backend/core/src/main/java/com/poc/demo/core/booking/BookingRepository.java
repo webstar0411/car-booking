@@ -1,11 +1,15 @@
 package com.poc.demo.core.booking;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
 
-public interface BookingRepository extends CrudRepository<Booking, Long> {
+public interface BookingRepository extends PagingAndSortingRepository<Booking, Long> {
 
     @Override
     <S extends Booking> S save(S entity);
@@ -21,4 +25,9 @@ public interface BookingRepository extends CrudRepository<Booking, Long> {
 
     @Override
     long count();
+
+    @Override
+    Page<Booking> findAll(Pageable pageable);
+
+    Page<Booking> findAllByNameContaining(String name, Pageable pageable);
 }

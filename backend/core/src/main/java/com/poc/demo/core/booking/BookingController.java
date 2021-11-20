@@ -68,7 +68,8 @@ public class BookingController {
     @GetMapping("/bookings/{id}")
     public ResponseEntity<Optional<Booking>> getBookingById(@PathVariable(name = "id") final Long id) {
         log.info("Getting booking with ID: " + id);
-        return new ResponseEntity<>(bookingService.getBooking(id), HttpStatus.OK);
+        Optional<Booking> booking = bookingService.getBooking(id);
+        return new ResponseEntity<>(booking, HttpStatus.OK);
     }
 
     @GetMapping("/bookings/count")

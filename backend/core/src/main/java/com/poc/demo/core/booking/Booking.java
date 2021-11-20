@@ -30,21 +30,29 @@ public class Booking implements Serializable {
     @Column(columnDefinition = "varchar(20) NOT NULL")
     private String phone;
 
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     private Timestamp pickup_time = Timestamp.valueOf(LocalDateTime.now());
 
-    private Timestamp waiting_time = Timestamp.valueOf(LocalDateTime.now());
+    @Column(columnDefinition = "INTEGER default 1.0")
+    private Integer waiting_time = 0;
 
+    @Column(columnDefinition = "BOOLEAN default TRUE")
     private Boolean asap = true;
 
+    @Column(columnDefinition = "INTEGER default 1")
     private Integer number_of_passengers = 1;
 
+    @Column(columnDefinition = "DECIMAL default 0.0")
     private Float price = 0.0f;
 
-    private Float rating = 0f;
+    @Column(columnDefinition = "DECIMAL default 1.0")
+    private Float rating = 1.0f;
 
-    private Date created_on  = Date.valueOf(LocalDate.now());
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    private Timestamp created_on  = Timestamp.valueOf(LocalDateTime.now());
 
-    private Date modified_on = Date.valueOf(LocalDate.now());
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+    private Timestamp modified_on = Timestamp.valueOf(LocalDateTime.now());
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

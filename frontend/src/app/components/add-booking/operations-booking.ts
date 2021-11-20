@@ -42,12 +42,13 @@ export class OperationsBooking {
     }
   }
 
-   resetForm(): void {
-
+  resetForm(): void {
   }
 
   submitToServer(): void {
-    this.bookingsService.create(this.formGroup.value)
+    const booking = this.formGroup.value;
+    booking.pickup_time = this.convertTime(booking.pickup_time);
+    this.bookingsService.create(booking)
       .subscribe(
         res => {
           this.formGroup.reset();
@@ -56,5 +57,13 @@ export class OperationsBooking {
         err => this.userMsgService.error('Fail to create Booking'),
         () => console.log('HTTP request completed.')
       );
+  }
+
+  convertTime(pickupTime: string): number {
+    const timeSplit = pickupTime.split(':');
+    const date = new Date();
+    date.setHours(parseInt(timeSplit[0], 10));
+    date.setMinutes(parseInt(timeSplit[1], 10));
+    return date.getTime();
   }
 }

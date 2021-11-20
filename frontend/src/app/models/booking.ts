@@ -6,11 +6,11 @@ export interface Booking {
   phone: string;
   asap: boolean;
   pickup_time: string;
-  waiting_time: string;
+  waiting_time: number;
   number_of_passengers: number;
   price: number;
   rating: number;
-  created_on: string;
-  modified_on: string;
+  created_on: number;
+  modified_on: number;
   waypoint: Waypoint;
 }

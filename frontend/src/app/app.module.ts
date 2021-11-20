@@ -29,6 +29,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {EditBookingComponent} from './components/add-booking/edit-booking.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {RestAmqInterceptor} from './interceptors/rest-amq.interceptor';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {DateToTimepickerPipe} from './pipes/date-to-timepicker.pipe';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import {RestAmqInterceptor} from './interceptors/rest-amq.interceptor';
     AddBookingComponent,
     HeaderNavbarComponent,
     EditBookingComponent,
+    DateToTimepickerPipe,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,8 @@ import {RestAmqInterceptor} from './interceptors/rest-amq.interceptor';
     MatInputModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [MatSnackBar, {provide: HTTP_INTERCEPTORS, useClass: RestAmqInterceptor, multi: true}],
   bootstrap: [AppComponent]

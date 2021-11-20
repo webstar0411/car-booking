@@ -5,6 +5,7 @@ import {BookingsService} from '../../services/bookings.service';
 import {OperationsBooking} from './operations-booking';
 import {ActivatedRoute} from '@angular/router';
 import {Booking} from '../../models/booking';
+import {DateToTimepickerPipe} from '../../pipes/date-to-timepicker.pipe';
 
 @Component({
   selector: 'cars-edit-booking',
@@ -27,8 +28,9 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
     this._bookingsService.getBooking(this.id)
       .subscribe(
         (res) => {
+          res.pickup_time = new DateToTimepickerPipe().transform(res.pickup_time);
           this.original = res;
-          this.formGroup.patchValue(res);
+          this.formGroup.patchValue(this.original);
         },
         err => this.userMsgService.error('Fail to retrieve booking'),
         () => console.log('HTTP request completed.')
@@ -36,13 +38,17 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
   }
 
   submitToServer(): void {
-    const booking: Booking = this.formGroup.value;
-    booking.id = this.id;
-    booking.waypoint.id = this.id;
+    const original: Booking = this.original;
+    const changes: Booking = this.formGroup.value;
+    const booking: Booking = {...original, ...changes};
+    booking.pickup_time = this.convertTime(booking.pickup_time).toString();
+    booking.waypoint.id = this.original.waypoint.id;
     this.bookingsService.update(booking)
       .subscribe(
         res => {
-          this.formGroup.reset();
+          res.pickup_time = new DateToTimepickerPipe().transform(res.pickup_time);
+          this.original = res;
+          this.formGroup.patchValue(this.original);
           this.userMsgService.ok('Booking saved.');
         },
         err => this.userMsgService.error('Fail to update Booking'),

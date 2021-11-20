@@ -38,8 +38,10 @@
              placeholder="pickup time"
              required
              type="text"
+             [format]="24" [ngxTimepicker]="picker"
       />
       <mat-error>This field is required</mat-error>
+      <ngx-material-timepicker #picker></ngx-material-timepicker>
     </mat-form-field>
 
     <mat-form-field class="book_form__group_item" [appearance]="bookingAppearance">

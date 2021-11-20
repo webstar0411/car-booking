@@ -1,0 +1,57 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  frontend:
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    container_name: frontend
+    image: frontend:latest
+    ports:
+      - 8080:80
+    restart: "no"
+    depends_on:
+      - core
+    networks:
+      - cabs-network
+
+  producer:
+    build:
+      context: backend/amq-producer/
+      dockerfile: Dockerfile
+    container_name: producer
+    image: producer:latest
+    ports:
+      - 8082:8082
+    restart: "no"
+    depends_on:
+      - rabbit
+    networks:
+      - cabs-network
+
+  core:
+    build:
+      context: backend/core/
+      dockerfile: Dockerfile
+    container_name: core
+    image: core:latest
+    ports:
+      - 8081:8081
+    restart: "no"
+    depends_on:
+      - rabbit
+    networks:
+      - cabs-network
+
+  rabbit:
+    image: rabbitmq:latest
+    container_name: rabbit
+    ports:
+      - 15672:15672
+      - 5672:5672
+    restart: "no"
+    networks:
+      - cabs-network
+
+networks:
+  cabs-network:
+    driver: bridge

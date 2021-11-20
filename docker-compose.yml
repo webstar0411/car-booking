@@ -12,7 +12,7 @@ services:
     depends_on:
       - core
     networks:
-      - cabs-network
+      - cars-network
 
   producer:
     build:
@@ -26,7 +26,7 @@ services:
     depends_on:
       - rabbit
     networks:
-      - cabs-network
+      - cars-network
 
   core:
     build:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - rabbit
     networks:
-      - cabs-network
+      - cars-network
 
   rabbit:
     image: rabbitmq:latest
@@ -50,8 +50,8 @@ services:
       - 5672:5672
     restart: "no"
     networks:
-      - cabs-network
+      - cars-network
 
 networks:
-  cabs-network:
+  cars-network:
     driver: bridge

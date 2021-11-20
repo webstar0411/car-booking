@@ -57,11 +57,15 @@ export class OperationsBooking {
   }
 
   convertTime(pickupTime: string): number {
-    const timeSplit = pickupTime.split(':');
-    const date = new Date();
-    date.setHours(parseInt(timeSplit[0], 10));
-    date.setMinutes(parseInt(timeSplit[1], 10));
-    return date.getTime();
+    try {
+      const timeSplit = pickupTime.split(':');
+      const date = new Date();
+      date.setHours(parseInt(timeSplit[0], 10));
+      date.setMinutes(parseInt(timeSplit[1], 10));
+      return date.getTime();
+    } catch (e) {
+      return new Date().getTime();
+    }
   }
 
   resetForm(): void {
@@ -76,5 +80,8 @@ export class OperationsBooking {
   }
 
   delete(): void {
+  }
+
+  clone(): void {
   }
 }

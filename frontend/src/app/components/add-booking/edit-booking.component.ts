@@ -40,18 +40,14 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
   }
 
   submitToServer(): void {
-    const original: Booking = this.original;
-    const changes: Booking = this.formGroup.value;
-    const booking: Booking = {...original, ...changes};
+    const booking: Booking = {...this.original, ...this.formGroup.value};
     booking.pickup_time = this.convertTime(booking.pickup_time).toString();
     booking.waypoint.id = this.original.waypoint.id;
     this.bookingsService.update(booking)
       .subscribe(
         res => {
+          this.userMsgService.ok('Booking updated.');
           res.pickup_time = new DateToTimepickerPipe().transform(res.pickup_time);
-          this.original = res;
-          this.formGroup.patchValue(this.original);
-          this.userMsgService.ok('Booking saved.');
         },
         err => this.userMsgService.error('Fail to update Booking'),
         () => console.log('HTTP request completed.')
@@ -60,6 +56,7 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
 
   public resetForm(): void {
     this.formGroup.patchValue(this.original);
+    this.userMsgService.ok('Booking original data has been restored.');
   }
 
   edit(): boolean {
@@ -70,10 +67,26 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
   delete(): void {
     this.bookingsService.delete(this.original).subscribe(
       res => {
-        this.userMsgService.ok('Booking deleted, your datatable is outdated.');
+        this.userMsgService.ok('Booking deleted.');
         this.router.navigate(['/bookings']);
       },
       err => this.userMsgService.error('Fail to delete Booking'),
+      () => console.log('HTTP request completed.')
+    );
+  }
+
+  clone(): void {
+    const reset = {
+      id: undefined,
+      created_on: undefined,
+      modified_on: undefined,
+      pickup_time: this.convertTime(this.original.pickup_time).toString(),
+      waypoint: {...this.original.waypoint, ...{id: undefined}}
+    };
+    const clone = {...this.original, ...reset};
+    this.bookingsService.create(clone).subscribe(
+      res => this.userMsgService.ok('Booking cloned,with success.'),
+      err => this.userMsgService.error('Fail to clone Booking'),
       () => console.log('HTTP request completed.')
     );
   }

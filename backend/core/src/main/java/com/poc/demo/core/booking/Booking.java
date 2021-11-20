@@ -1,17 +1,13 @@
 package com.poc.demo.core.booking;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.poc.demo.core.waypoint.Waypoint;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
+import com.poc.demo.core.waypoint.Waypoint;
 
 
 @Entity(name = "bookings")
@@ -49,7 +45,7 @@ public class Booking implements Serializable {
     private Float rating = 1.0f;
 
     @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
-    private Timestamp created_on  = Timestamp.valueOf(LocalDateTime.now());
+    private Timestamp created_on = Timestamp.valueOf(LocalDateTime.now());
 
     @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
     private Timestamp modified_on = Timestamp.valueOf(LocalDateTime.now());

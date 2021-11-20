@@ -20,7 +20,7 @@ public class RabbitMqWebController {
     @PostMapping("/bookings")
     public ResponseEntity<Object> createBooking(@RequestBody Object booking) {
         try {
-            log.info("Creating a new Booking: {}", booking);
+            log.info("Creating a new Booking through AMQ: {}", booking);
             amqpTemplate.convertAndSend(exchangeName, "booking.add", booking);
             return new ResponseEntity<>(booking, HttpStatus.OK);
         } catch (AmqpException e) {
@@ -32,7 +32,7 @@ public class RabbitMqWebController {
     @PutMapping("/bookings/{id}")
     public ResponseEntity<Object> updateBooking(@RequestBody Object booking,
                                                 @PathVariable(name = "id") final Long id) {
-        log.info("Updating  Booking: {}", booking);
+        log.info("Updating  Booking through AMQ: {}", booking);
         try {
             amqpTemplate.convertAndSend(exchangeName, "booking.edit", booking);
             return new ResponseEntity<>(booking, HttpStatus.OK);
@@ -44,11 +44,11 @@ public class RabbitMqWebController {
 
     @DeleteMapping("/bookings/{id}")
     public ResponseEntity<String> createBooking(@PathVariable(name = "id") final Long id) {
-        log.info("Deleting  Booking: {}", id);
+        log.info("Deleting  Booking through AMQ: {}", id);
         try {
             amqpTemplate.convertAndSend(exchangeName, "booking.delete", id);
-            return new ResponseEntity<>("Booking entry deleted with success.", HttpStatus.OK);
-        } catch (AmqpException e) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>("Error deleting booking entry.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

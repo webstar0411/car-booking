@@ -1,7 +1,6 @@
 package com.poc.demo.core.waypoint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.poc.demo.core.booking.Booking;
 import lombok.Data;
 

@@ -58,18 +58,6 @@ export class BookingsService extends BaseRequests {
     return this.http.delete<any>(this.forUri(`/bookings/${booking.id}`));
   }
 
-  clone(booking: Booking): Observable<Booking> {
-    const reset = {
-      id: undefined,
-      created_on: undefined,
-      modified_on: undefined,
-      waypoint: {...booking.waypoint, ...{id: undefined}}
-    };
-    const clone = {...booking, ...reset};
-    // @ts-ignore
-    return this.create(clone);
-  }
-
 
   getBookingsPaginated(metadata: Map<any, any>): Observable<PaginationResponse<Booking[]>> {
     return this.http.get<any>(this.forUri('/bookings'), {

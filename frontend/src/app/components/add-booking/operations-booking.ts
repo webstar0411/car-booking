@@ -6,6 +6,7 @@ import {MatFormFieldAppearance} from '@angular/material/form-field/form-field';
 
 export class OperationsBooking {
 
+
   readonly waypointFormGroup = this.formBuilder.group({
     locality: ['', Validators.required],
     latitude: ['', Validators.required],
@@ -43,7 +44,7 @@ export class OperationsBooking {
   }
 
   submitToServer(): void {
-    const booking = this.formGroup.value;
+    const booking = {...this.formGroup.value};
     booking.pickup_time = this.convertTime(booking.pickup_time);
     this.bookingsService.create(booking)
       .subscribe(
@@ -66,9 +67,6 @@ export class OperationsBooking {
   resetForm(): void {
   }
 
-  disableButton(): boolean {
-    return false;
-  }
 
   edit(): boolean {
     return false;

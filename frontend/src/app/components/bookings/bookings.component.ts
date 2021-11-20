@@ -5,9 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {fromEvent, merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {BookingsService} from '../../services/bookings.service';
 import {Booking} from '../../models/booking';
-import {UserMsgService} from '../../services/user-msg.service';
 
 interface ColOptions {
   isDateTime: boolean;
@@ -54,9 +52,7 @@ export class BookingsComponent implements OnInit, AfterViewInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
-              private bookingsDataSourceService: BookingsDataSourceService,
-              private bookingsService: BookingsService,
-              private userMsgService: UserMsgService) {
+              private bookingsDataSourceService: BookingsDataSourceService) {
     this.dataSource = bookingsDataSourceService;
   }
 

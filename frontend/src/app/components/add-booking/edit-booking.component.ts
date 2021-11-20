@@ -3,7 +3,7 @@ import {FormBuilder} from '@angular/forms';
 import {UserMsgService} from '../../services/user-msg.service';
 import {BookingsService} from '../../services/bookings.service';
 import {OperationsBooking} from './operations-booking';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Booking} from '../../models/booking';
 import {DateToTimepickerPipe} from '../../pipes/date-to-timepicker.pipe';
 
@@ -15,11 +15,13 @@ import {DateToTimepickerPipe} from '../../pipes/date-to-timepicker.pipe';
 export class EditBookingComponent extends OperationsBooking implements OnInit {
   private id: number;
   private original: any;
+  private isDeleted = false;
 
   constructor(protected formBuilder: FormBuilder,
               protected userMsgService: UserMsgService,
               protected bookingsService: BookingsService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
     super(formBuilder, userMsgService, bookingsService);
     this.id = Number.parseInt(this.route.snapshot.paramMap.get('id') as string, 10);
   }
@@ -60,28 +62,16 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
     this.formGroup.patchValue(this.original);
   }
 
-  disableButton(): boolean {
-    return !this.formGroup.dirty;
-  }
-
   edit(): boolean {
     return true;
   }
 
-  clone(): void {
-    this.bookingsService.clone(this.original).subscribe(
-      res => {
-        this.userMsgService.ok('Booking cloned, your data table is outdated.');
-      },
-      err => this.userMsgService.error('Fail to clone Booking'),
-      () => console.log('HTTP request completed.')
-    );
-  }
 
   delete(): void {
     this.bookingsService.delete(this.original).subscribe(
       res => {
         this.userMsgService.ok('Booking deleted, your datatable is outdated.');
+        this.router.navigate(['/bookings']);
       },
       err => this.userMsgService.error('Fail to delete Booking'),
       () => console.log('HTTP request completed.')

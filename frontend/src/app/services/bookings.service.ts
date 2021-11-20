@@ -23,7 +23,7 @@ export class BookingsService extends BaseRequests {
     super();
   }
 
-  save(booking: Booking): Observable<Booking> {
+  create(booking: Booking): Observable<Booking> {
     return this.http.post<Booking>(this.forUri('/bookings'), booking);
   }
 
@@ -39,7 +39,15 @@ export class BookingsService extends BaseRequests {
     });
   }
 
+  getBooking(id: number ): Observable<Booking> {
+    return this.http.get<Booking>(this.forUri(`/bookings/${id}`));
+  }
+
   getBookingsCount(): Observable<number> {
     return this.http.get<number>(this.forUri('/bookings/count'));
+  }
+
+  update(booking: Booking): Observable<Booking> {
+    return this.http.put<Booking>(this.forUri(`/bookings/${booking.id}`), booking);
   }
 }

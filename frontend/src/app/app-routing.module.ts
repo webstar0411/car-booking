@@ -4,6 +4,7 @@ import {BookingsComponent} from './components/bookings/bookings.component';
 import {BookingsCountResolver} from './services/bookings-count-resolver.service';
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {AddBookingComponent} from './components/add-booking/add-booking.component';
+import {EditBookingComponent} from './components/add-booking/edit-booking.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
       totalBookings: BookingsCountResolver
     }
   },
+  {path: 'bookings/:id/edit', component: EditBookingComponent}
 
 ];
 

@@ -93,7 +93,7 @@
       <mat-icon matPrefix>eco</mat-icon>
       <input formControlName="rating"
              matInput
-             min="1"
+             min="0.1"
              required
              type="number"
       />
@@ -143,6 +143,6 @@
 
   <div class="buttons book_form__group">
     <button color="primary" mat-raised-button type="submit">Submit</button>
-    <button color="accent" mat-raised-button type="reset">Reset</button>
+    <button color="accent" mat-raised-button (click)="resetForm()" >Reset</button>
   </div>
 </form>

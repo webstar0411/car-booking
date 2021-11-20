@@ -26,6 +26,7 @@ import { HeaderNavbarComponent } from './components/header-navbar/header-navbar.
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {EditBookingComponent} from './components/add-booking/edit-booking.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     HomePageComponent,
     AddBookingComponent,
     HeaderNavbarComponent,
+    EditBookingComponent,
 
   ],
   imports: [

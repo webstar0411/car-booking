@@ -1,57 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
 import {BookingsService} from '../../services/bookings.service';
 import {UserMsgService} from '../../services/user-msg.service';
-import {MatFormFieldAppearance} from '@angular/material/form-field/form-field';
+import {OperationsBooking} from './operations-booking';
 
 @Component({
   selector: 'cars-add-booking',
-  templateUrl: './add-booking.component.html',
-  styleUrls: ['./add-booking.component.scss']
+  templateUrl: './operations-booking.html',
+  styleUrls: ['./operations-booking.scss']
 })
-export class AddBookingComponent implements OnInit {
+export class AddBookingComponent extends OperationsBooking {
 
-  readonly formGroup = this.formBuilder.group({
-    name: ['', Validators.required],
-    phone: ['', Validators.required],
-    asap: [true],
-    pickup_time: ['', Validators.required],
-    waiting_time: ['', Validators.required],
-    number_of_passengers: ['', Validators.required],
-    price: ['', Validators.required],
-    rating: ['', Validators.required],
-    waypoint: this.formBuilder.group({
-      locality: ['', Validators.required],
-      latitude: ['', Validators.required],
-      longitude: ['', Validators.required],
-    })
 
-  });
-  bookingAppearance: MatFormFieldAppearance = 'fill';
-  waypointAppearance: MatFormFieldAppearance = 'outline';
-
-  constructor(private formBuilder: FormBuilder,
-              private userMsgService: UserMsgService,
-              private bookingsService: BookingsService) {
-
+  constructor(protected formBuilder: FormBuilder,
+              protected userMsgService: UserMsgService,
+              protected bookingsService: BookingsService) {
+    super(formBuilder, userMsgService, bookingsService);
   }
 
-  submit(): void {
-    this.formGroup.controls.asap.markAsDirty();
-    if (this.formGroup.valid) {
-      this.bookingsService.save(this.formGroup.value)
-        .subscribe(
-          res => {
-            this.formGroup.reset();
-            this.userMsgService.ok('Booking saved.');
-          },
-          err => this.userMsgService.error('Fail to save Booking'),
-          () => console.log('HTTP request completed.')
-        );
-    }
-  }
 
-  ngOnInit(): void {
-
-  }
 }

@@ -1,6 +1,11 @@
 .cars-header {
 
-  display: flex;
+z-index: 999!important;
+  @supports (position: sticky) or (position: -webkit-sticky) {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+  }
   width: 100%;
   justify-content: space-between;
 

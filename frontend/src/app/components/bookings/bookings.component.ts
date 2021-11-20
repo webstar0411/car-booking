@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BookingsDataSourceService} from '../../services/bookings-data-source.service';
 import {MatPaginator} from '@angular/material/paginator';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {fromEvent, merge} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -51,12 +51,14 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   // @ts-ignore
   @ViewChild('input', {static: true}) search!: ElementRef;
 
-  constructor(private route: ActivatedRoute, private bookingsDataSourceService: BookingsDataSourceService) {
+  constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private bookingsDataSourceService: BookingsDataSourceService) {
     this.dataSource = bookingsDataSourceService;
   }
 
   ngOnInit(): void {
-    this.totalItems = this.route.snapshot.data.totalBookings;
+    this.totalItems = this.activatedRoute.snapshot.data.totalBookings;
     this.dataSource.load(this.defaultOptions.FILTER,
       this.defaultOptions.SORT_FIELD,
       this.defaultOptions.SORT_ORDER,
@@ -67,6 +69,7 @@ export class BookingsComponent implements OnInit, AfterViewInit {
 
   onRowClick(row: any): void {
     console.log('Row clicked: ', row);
+    this.router.navigate(['/bookings', row.id, 'edit']);
   }
 
   ngAfterViewInit(): void {

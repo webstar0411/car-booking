@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
@@ -20,13 +20,15 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { HomePageComponent } from './components/home-page/home-page.component';
-import { AddBookingComponent } from './components/add-booking/add-booking.component';
-import { HeaderNavbarComponent } from './components/header-navbar/header-navbar.component';
+import {HomePageComponent} from './components/home-page/home-page.component';
+import {AddBookingComponent} from './components/add-booking/add-booking.component';
+import {HeaderNavbarComponent} from './components/header-navbar/header-navbar.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {EditBookingComponent} from './components/add-booking/edit-booking.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {RestAmqInterceptor} from './interceptors/rest-amq.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,6 @@ import {EditBookingComponent} from './components/add-booking/edit-booking.compon
     AddBookingComponent,
     HeaderNavbarComponent,
     EditBookingComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -58,9 +59,10 @@ import {EditBookingComponent} from './components/add-booking/edit-booking.compon
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonToggleModule
   ],
-  providers: [MatSnackBar],
+  providers: [MatSnackBar, {provide: HTTP_INTERCEPTORS, useClass: RestAmqInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,1 +1,17 @@
-<p>home-page works!</p>
+<div class="homepage">
+  <div class="homepage__uri">
+    <div class="homepage__uri_options">
+      <button class="homepage__uri_options_label" mat-flat-button>Backend Protocol:</button>
+      <mat-button-toggle-group [value]="backendProtocol()">
+        <mat-button-toggle (click)="setBackendProtocol('rest')" value="rest">Rest</mat-button-toggle>
+        <mat-button-toggle (click)="setBackendProtocol('amq')" value="amq">AMQ</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="homepage__uri_descriptions">
+      Select the backend handler for PUT, DELETE, POST operations<br/>
+      - Rest: request will be forward to rest interface<br/>
+      - AMQ: requests will be forward to RabbitMQ interface<br/>
+      ** AMQ requests will return success if producer success forwards MSG to consumers
+    </div>
+  </div>
+</div>

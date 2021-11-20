@@ -2,11 +2,15 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
 import {Booking} from '../models/booking';
 
 class BaseRequests {
   private readonly baseUrl: string = environment.backend.baseURL;
+  private readonly baseAmqUrl: string = environment.backend.baseAmqURL;
+
+
+  // localStorage.setItem('useAmqUri', true);
+
 
   forUri(uri: string): string {
     return `${this.baseUrl}${uri}`;
@@ -49,5 +53,9 @@ export class BookingsService extends BaseRequests {
 
   update(booking: Booking): Observable<Booking> {
     return this.http.put<Booking>(this.forUri(`/bookings/${booking.id}`), booking);
+  }
+
+  delete(booking: Booking): Observable<any> {
+    return this.http.delete<any>(this.forUri(`/bookings/${booking.id}`));
   }
 }

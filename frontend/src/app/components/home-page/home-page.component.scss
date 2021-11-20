@@ -1,0 +1,22 @@
+.homepage {
+  height: 70%;
+
+  &__uri {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    align-content: center;
+
+    &_options {
+      &_label {
+        pointer-events: none;
+      }
+    }
+
+
+    &_descriptions {
+      padding: 20px;
+      font-size: 0.8em;
+    }
+  }
+}

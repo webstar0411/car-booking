@@ -4,22 +4,24 @@ import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {fromEvent, merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {BookingsService} from '../../services/bookings.service';
+import {Booking} from '../../models/booking';
+import {UserMsgService} from '../../services/user-msg.service';
 
 interface ColOptions {
+  isDateTime: boolean;
   name: string;
   id: string;
 }
 
 const COL_DEF: ColOptions[] = [
-  {id: 'id', name: 'ID'},
-  {id: 'name', name: 'Name'},
-  {id: 'phone', name: 'Phone'},
-  {id: 'price', name: 'Price'},
-  {id: 'rating', name: 'Rating'},
-  {id: 'pickup_time', name: 'Pickup'},
-  {id: 'waiting_time', name: 'Waiting'},
-  {id: 'waypoint?.locality', name: 'Location'},
+  {id: 'name', name: 'Name', isDateTime: false},
+  {id: 'phone', name: 'Phone', isDateTime: false},
+  {id: 'price', name: 'Price', isDateTime: false},
+  {id: 'rating', name: 'Rating', isDateTime: false},
+  {id: 'pickup_time', name: 'Pickup', isDateTime: true},
+  {id: 'waiting_time', name: 'Waiting', isDateTime: false},
 ];
 
 const TABLE_DEFAULT_OPTIONS = {
@@ -41,7 +43,6 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   defaultOptions = TABLE_DEFAULT_OPTIONS;
   dataSource: BookingsDataSourceService;
   colDef = COL_DEF;
-  displayedColumns = COL_DEF.map(i => i.id);
   totalItems = 0;
 
   // @ts-ignore
@@ -53,8 +54,17 @@ export class BookingsComponent implements OnInit, AfterViewInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
-              private bookingsDataSourceService: BookingsDataSourceService) {
+              private bookingsDataSourceService: BookingsDataSourceService,
+              private bookingsService: BookingsService,
+              private userMsgService: UserMsgService) {
     this.dataSource = bookingsDataSourceService;
+  }
+
+  get displayedColumns(): string[] {
+    const cols = COL_DEF.map(i => i.id);
+    cols.push('locality');
+    cols.push('actions');
+    return cols;
   }
 
   ngOnInit(): void {
@@ -66,11 +76,6 @@ export class BookingsComponent implements OnInit, AfterViewInit {
       this.defaultOptions.PAGE_SIZE);
   }
 
-
-  onRowClick(row: any): void {
-    console.log('Row clicked: ', row);
-    this.router.navigate(['/bookings', row.id, 'edit']);
-  }
 
   ngAfterViewInit(): void {
 
@@ -88,7 +93,6 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   }
 
 
-
   private loadPage(): void {
     this.dataSource.load(
       this.search.nativeElement.value,
@@ -96,6 +100,30 @@ export class BookingsComponent implements OnInit, AfterViewInit {
       this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize);
+  }
+
+  edit(id: string): void {
+    this.router.navigate(['/bookings', id, 'edit']);
+  }
+
+  clone(booking: Booking): void {
+    this.bookingsService.clone(booking).subscribe(
+      res => {
+        this.userMsgService.ok('Booking cloned, your data table is outdated.');
+      },
+      err => this.userMsgService.error('Fail to clone Booking'),
+      () => console.log('HTTP request completed.')
+    );
+  }
+
+  delete(booking: Booking): void {
+    this.bookingsService.delete(booking).subscribe(
+      res => {
+        this.userMsgService.ok('Booking deleted, your datatable is outdated.');
+      },
+      err => this.userMsgService.error('Fail to delete Booking'),
+      () => console.log('HTTP request completed.')
+    );
   }
 }
 

@@ -45,13 +45,16 @@ export class OperationsBooking {
   resetForm(): void {
   }
 
+  edit(): boolean {
+    return false;
+  }
+
   submitToServer(): void {
     const booking = this.formGroup.value;
     booking.pickup_time = this.convertTime(booking.pickup_time);
     this.bookingsService.create(booking)
       .subscribe(
         res => {
-          this.formGroup.reset();
           this.userMsgService.ok('Booking saved.');
         },
         err => this.userMsgService.error('Fail to create Booking'),

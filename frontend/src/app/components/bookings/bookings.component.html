@@ -1,7 +1,7 @@
 <div class="cars-bookings-table">
   <mat-form-field>
     <mat-label>Search</mat-label>
-      <input #input matInput matNativeControl placeholder="search by name">
+    <input #input matInput matNativeControl placeholder="search by name">
   </mat-form-field>
 
   <div *ngIf="dataSource.loading$ | async" class="cars-bookings-table__spinner">
@@ -14,14 +14,38 @@
 
     <ng-container *ngFor="let col of colDef">
       <ng-container [matColumnDef]="col.id">
-        <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.id"> {{col.name}} </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element[col.id]}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.id"> {{col.name}}</mat-header-cell>
+        <ng-container *ngIf="col.isDateTime">
+          <mat-cell *matCellDef="let element"> {{element[col.id] | dateToTimepicker}}</mat-cell>
+        </ng-container>
+        <ng-container *ngIf="!col.isDateTime">
+          <mat-cell *matCellDef="let element"> {{element[col.id]}}</mat-cell>
+        </ng-container>
       </ng-container>
     </ng-container>
 
+    <ng-container matColumnDef="locality">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="locality">Locality</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.waypoint?.locality}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button (click)="edit(element.id)" color="primary" mat-icon-button matTooltip="Edit">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button (click)="clone(element)" color="primary" mat-icon-button matTooltip="Clone">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        <button (click)="delete(element)" color="primary" mat-icon-button matTooltip="Delete">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row (click)="onRowClick(row)"
-             *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
   <mat-paginator

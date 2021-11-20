@@ -6,11 +6,6 @@ import {Booking} from '../models/booking';
 
 class BaseRequests {
   private readonly baseUrl: string = environment.backend.baseURL;
-  private readonly baseAmqUrl: string = environment.backend.baseAmqURL;
-
-
-  // localStorage.setItem('useAmqUri', true);
-
 
   forUri(uri: string): string {
     return `${this.baseUrl}${uri}`;
@@ -31,7 +26,7 @@ export class BookingsService extends BaseRequests {
     return this.http.post<Booking>(this.forUri('/bookings'), booking);
   }
 
-  getBookings(filter: string, sortField: string, sortDirection: string, pageNumber: number , pageSize: number): Observable<Booking[]> {
+  getBookings(filter: string, sortField: string, sortDirection: string, pageNumber: number, pageSize: number): Observable<Booking[]> {
     return this.http.get<Booking[]>(this.forUri('/bookings'), {
       params: new HttpParams()
         .set('filter', filter)
@@ -43,7 +38,7 @@ export class BookingsService extends BaseRequests {
     });
   }
 
-  getBooking(id: number ): Observable<Booking> {
+  getBooking(id: number): Observable<Booking> {
     return this.http.get<Booking>(this.forUri(`/bookings/${id}`));
   }
 
@@ -57,5 +52,17 @@ export class BookingsService extends BaseRequests {
 
   delete(booking: Booking): Observable<any> {
     return this.http.delete<any>(this.forUri(`/bookings/${booking.id}`));
+  }
+
+  clone(booking: Booking): Observable<Booking> {
+    const reset = {
+      id: undefined,
+      created_on: undefined,
+      modified_on: undefined,
+      waypoint: {...booking.waypoint, ...{id: undefined}}
+    };
+    const clone = {...booking, ...reset};
+    // @ts-ignore
+    return this.create(clone);
   }
 }

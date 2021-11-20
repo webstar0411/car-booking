@@ -145,6 +145,7 @@
 
   <div class="buttons book_form__group">
     <button color="primary" mat-raised-button type="submit">Submit</button>
-    <button color="accent" mat-raised-button (click)="resetForm()" >Reset</button>
+    <button *ngIf="!edit()" color="accent" mat-raised-button type="reset">Reset</button>
+    <button (click)="resetForm()" *ngIf="edit()" color="accent" mat-raised-button>Restore</button>
   </div>
 </form>

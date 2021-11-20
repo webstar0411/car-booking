@@ -64,7 +64,8 @@ import {DateToTimepickerPipe} from './pipes/date-to-timepicker.pipe';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatButtonToggleModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    MatTooltipModule
   ],
   providers: [MatSnackBar, {provide: HTTP_INTERCEPTORS, useClass: RestAmqInterceptor, multi: true}],
   bootstrap: [AppComponent]

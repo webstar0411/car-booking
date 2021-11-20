@@ -60,4 +60,7 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
     this.formGroup.patchValue(this.original);
   }
 
+  edit(): boolean {
+    return true;
+  }
 }

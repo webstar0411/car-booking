@@ -42,13 +42,6 @@ export class OperationsBooking {
     }
   }
 
-  resetForm(): void {
-  }
-
-  edit(): boolean {
-    return false;
-  }
-
   submitToServer(): void {
     const booking = this.formGroup.value;
     booking.pickup_time = this.convertTime(booking.pickup_time);
@@ -68,5 +61,22 @@ export class OperationsBooking {
     date.setHours(parseInt(timeSplit[0], 10));
     date.setMinutes(parseInt(timeSplit[1], 10));
     return date.getTime();
+  }
+
+  resetForm(): void {
+  }
+
+  disableButton(): boolean {
+    return false;
+  }
+
+  edit(): boolean {
+    return false;
+  }
+
+  clone(): void {
+  }
+
+  delete(): void {
   }
 }

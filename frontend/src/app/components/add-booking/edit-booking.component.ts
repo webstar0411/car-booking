@@ -60,7 +60,31 @@ export class EditBookingComponent extends OperationsBooking implements OnInit {
     this.formGroup.patchValue(this.original);
   }
 
+  disableButton(): boolean {
+    return !this.formGroup.dirty;
+  }
+
   edit(): boolean {
     return true;
+  }
+
+  clone(): void {
+    this.bookingsService.clone(this.original).subscribe(
+      res => {
+        this.userMsgService.ok('Booking cloned, your data table is outdated.');
+      },
+      err => this.userMsgService.error('Fail to clone Booking'),
+      () => console.log('HTTP request completed.')
+    );
+  }
+
+  delete(): void {
+    this.bookingsService.delete(this.original).subscribe(
+      res => {
+        this.userMsgService.ok('Booking deleted, your datatable is outdated.');
+      },
+      err => this.userMsgService.error('Fail to delete Booking'),
+      () => console.log('HTTP request completed.')
+    );
   }
 }

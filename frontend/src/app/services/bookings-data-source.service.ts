@@ -1,25 +1,29 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Booking} from '../models/booking';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subscription} from 'rxjs';
 import {BookingsService} from './bookings.service';
-import {catchError, finalize} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
+import {BOOKINGS_PAGINATOR} from '../store/bookings-paginator';
+import {PaginatorPlugin} from '@datorama/akita';
+import {TableOptions} from '../models/table-options';
 
 @Injectable()
 export class BookingsDataSourceService implements DataSource<Booking> {
   public readonly loading$ = new BehaviorSubject<boolean>(false);
   private bookings$ = new BehaviorSubject<Booking[]>([]);
 
-  constructor(private bookingsService: BookingsService) {
+  readonly totalCount$ = new BehaviorSubject(1);
+  private subscriptions: Subscription[] = [];
+
+  constructor(@Inject(BOOKINGS_PAGINATOR) private paginatorRef: PaginatorPlugin<Booking>,
+              private bookingsService: BookingsService) {
   }
 
-  load(filter: string, sortField: string, sortDirection: string, pageIndex: number, pageSize: number): void {
-    this.loading$.next(true);
-    this.bookingsService.getBookings(filter, sortField, sortDirection, pageIndex, pageSize)
-      .pipe(
-        catchError(() => of([])),
-        finalize(() => this.loading$.next(false))
-      ).subscribe(dta => this.bookings$.next(dta));
+
+  load(options: TableOptions): void {
+    this.overwriteAkitaOptions(options);
+    this.setDataLoader(options);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Booking[] | ReadonlyArray<Booking>> {
@@ -31,5 +35,53 @@ export class BookingsDataSourceService implements DataSource<Booking> {
     console.log('Disconnecting data source');
     this.bookings$.complete();
     this.loading$.complete();
+    this.paginatorRef.destroy();
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+
+  private setDataLoader(options: TableOptions): void {
+    const subscription = combineLatest([this.paginatorRef.pageChanges, options.filter, options.page, options.sort])
+      .pipe(
+        switchMap(([pageNumber, filter, page, sort]) => {
+            this.paginatorRef.metadata.set('filter', filter);
+            this.paginatorRef.metadata.set('sortField', sort.active);
+            this.paginatorRef.metadata.set('sortOrder', sort.direction);
+            this.paginatorRef.metadata.set('pageNumber', page.pageIndex);
+            this.paginatorRef.metadata.set('pageSize', page.pageSize);
+
+            const requestFn = () => this.bookingsService.getBookingsPaginated(this.paginatorRef.metadata)
+              // @ts-ignore
+              .pipe(tap(data => this.totalCount$.next(data.total)));
+            return this.paginatorRef.getPage(requestFn);
+          }
+        ))
+      // @ts-ignore
+      .subscribe(page => this.bookings$.next(page.data));
+    this.subscriptions.push(subscription);
+  }
+
+  private overwriteAkitaOptions(options: TableOptions): void {
+    const subscription = combineLatest([options.filter, options.page, options.sort])
+      .pipe(
+        switchMap(([filter, page, sort]) => {
+          this.testClearCacheByField('pageSize', page.pageSize);
+          this.testClearCacheByField('sortOrder', sort.direction);
+          this.testClearCacheByField('sortField', sort.active);
+          this.testClearCacheByField('filter', filter);
+
+          if (page.pageIndex !== page.previousPageIndex) {
+            this.paginatorRef.setPage(page.pageIndex);
+          }
+
+          return of();
+        })).subscribe();
+    this.subscriptions.push(subscription);
+  }
+
+  private testClearCacheByField(metadataKey: string, currentValue: any): void {
+    if (this.paginatorRef.metadata.get(metadataKey) !== currentValue) {
+      this.paginatorRef.clearCache();
+    }
   }
 }

@@ -144,7 +144,11 @@
 
 
   <div class="buttons book_form__group">
-    <button color="primary" mat-raised-button type="submit">Submit</button>
+    <button [disabled]="disableButton()" color="primary" mat-raised-button type="submit">Submit</button>
+    <button (click)="resetForm()" *ngIf="edit()" [disabled]="disableButton()" color="accent" mat-raised-button>Restore
+    </button>
+    <button (click)="clone()" *ngIf="edit()" color="accent" mat-raised-button>Clone</button>
+    <button (click)="delete()" *ngIf="edit()" color="accent" mat-raised-button>Delete</button>
     <button *ngIf="!edit()" color="accent" mat-raised-button type="reset">Reset</button>
     <button (click)="resetForm()" *ngIf="edit()" color="accent" mat-raised-button>Restore</button>
   </div>

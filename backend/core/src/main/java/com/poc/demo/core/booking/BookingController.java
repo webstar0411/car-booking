@@ -41,9 +41,16 @@ public class BookingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/bookings/{id}")
+    public ResponseEntity<Optional<Booking>> getBookingById(@PathVariable(name = "id") final Long id) {
+        log.info("Getting booking with ID: " + id);
+        Optional<Booking> booking = bookingService.getBooking(id);
+        return new ResponseEntity<>(booking, HttpStatus.OK);
+    }
+
 
     @GetMapping("/bookings")
-    public ResponseEntity<Iterable<Booking>> getBookings(
+    public ResponseEntity<Page<Booking>> getBookings(
             @RequestParam(name = "filter") String filter,
             @RequestParam(name = "sortField") String sortField,
             @RequestParam(name = "sortOrder") String sortOrder,
@@ -62,15 +69,10 @@ public class BookingController {
         } else {
             bookings = bookingService.getBookings(pageRequest);
         }
-        return new ResponseEntity<>(bookings.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @GetMapping("/bookings/{id}")
-    public ResponseEntity<Optional<Booking>> getBookingById(@PathVariable(name = "id") final Long id) {
-        log.info("Getting booking with ID: " + id);
-        Optional<Booking> booking = bookingService.getBooking(id);
-        return new ResponseEntity<>(booking, HttpStatus.OK);
-    }
+
 
     @GetMapping("/bookings/count")
     public ResponseEntity<Long> getBookingsCount() {

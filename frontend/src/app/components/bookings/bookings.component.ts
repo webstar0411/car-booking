@@ -32,7 +32,6 @@ const TABLE_DEFAULT_OPTIONS = {
   FILTER: ''
 };
 
-
 @Component({
   selector: 'cars-bookings',
   templateUrl: './bookings.component.html',
@@ -44,6 +43,7 @@ export class BookingsComponent implements OnInit, AfterViewInit {
   dataSource: BookingsDataSourceService;
   colDef = COL_DEF;
   totalItems = 0;
+
 
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;

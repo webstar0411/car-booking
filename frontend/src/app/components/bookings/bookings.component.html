@@ -49,7 +49,7 @@
   </mat-table>
 
   <mat-paginator
-    [length]="totalItems"
+    [length]="totalItems$ | async"
     [pageSizeOptions]="defaultOptions.PAGE_SIZE_OPTIONS"
     [pageSize]="defaultOptions.PAGE_SIZE"></mat-paginator>
 </div>

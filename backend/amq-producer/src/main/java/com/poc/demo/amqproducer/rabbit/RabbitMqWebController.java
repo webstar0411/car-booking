@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/amq")
 public class RabbitMqWebController {
-    private static final String exchangeName = "BookingExchange";
+    private static final String exchangeName = "MessageExchange";
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -21,11 +21,11 @@ public class RabbitMqWebController {
     public ResponseEntity<Object> createBooking(@RequestBody Object booking) {
         try {
             log.info("Creating a new Booking: {}", booking);
-            amqpTemplate.convertAndSend(exchangeName, "addBooking", booking);
+            amqpTemplate.convertAndSend(exchangeName, "booking.add", booking);
             return new ResponseEntity<>(booking, HttpStatus.OK);
         } catch (AmqpException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>("FAil to create new booking", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Fail to create new booking", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -34,7 +34,7 @@ public class RabbitMqWebController {
                                                 @PathVariable(name = "id") final Long id) {
         log.info("Updating  Booking: {}", booking);
         try {
-            amqpTemplate.convertAndSend(exchangeName, "editBooking", booking);
+            amqpTemplate.convertAndSend(exchangeName, "booking.edit", booking);
             return new ResponseEntity<>(booking, HttpStatus.OK);
         } catch (AmqpException e) {
             log.error(e.getMessage());
@@ -46,7 +46,7 @@ public class RabbitMqWebController {
     public ResponseEntity<String> createBooking(@PathVariable(name = "id") final Long id) {
         log.info("Deleting  Booking: {}", id);
         try {
-            amqpTemplate.convertAndSend(exchangeName, "deleteBooking", id);
+            amqpTemplate.convertAndSend(exchangeName, "booking.delete", id);
             return new ResponseEntity<>("Booking entry deleted with success.", HttpStatus.OK);
         } catch (AmqpException e) {
             log.error(e.getMessage());

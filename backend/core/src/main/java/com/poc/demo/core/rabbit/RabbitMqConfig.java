@@ -21,6 +21,7 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 @Configuration
 public class RabbitMqConfig implements RabbitListenerConfigurer {
 
+    // queues
     @Bean
     Queue addQueue() {
         return new Queue("BookingAddQueue", false);
@@ -37,35 +38,49 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
     }
 
     @Bean
-    DirectExchange exchange() {
+    Queue auditQueue() {
+        return new Queue("MessageAuditQueue", false);
+    }
+
+
+    // exchanges
+    @Bean
+    TopicExchange messageExchange() {
+        return new TopicExchange("MessageExchange");
+    }
+
+    @Bean
+    DirectExchange bookingExchange() {
         return new DirectExchange("BookingExchange");
     }
 
+
+    // bindings
     @Bean
-    Binding addBinding(Queue addQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(addQueue).to(exchange).with("addBooking");
+    Binding addBinding(Queue addQueue, DirectExchange bookingExchange) {
+        return BindingBuilder.bind(addQueue).to(bookingExchange).with("booking.add");
     }
 
     @Bean
-    Binding editBinding(Queue editQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(editQueue).to(exchange).with("editBooking");
+    Binding editBinding(Queue editQueue, DirectExchange bookingExchange) {
+        return BindingBuilder.bind(editQueue).to(bookingExchange).with("booking.edit");
     }
 
     @Bean
-    Binding deleteBinding(Queue deleteQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(deleteQueue).to(exchange).with("deleteBooking");
-    }
-
-
-    @Bean
-    Queue adminQueue() {
-        return new Queue("adminQueue", false);
+    Binding deleteBinding(Queue deleteQueue, DirectExchange bookingExchange) {
+        return BindingBuilder.bind(deleteQueue).to(bookingExchange).with("booking.delete");
     }
 
     @Bean
-    Binding adminBinding(Queue adminQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(adminQueue).to(exchange).with("admin");
+    Binding auditBinding(Queue auditQueue, TopicExchange messageExchange) {
+        return BindingBuilder.bind(auditQueue).to(messageExchange).with("booking.*");
     }
+
+    @Bean
+    Binding exchangeBinding(DirectExchange bookingExchange, TopicExchange messageExchange) {
+        return BindingBuilder.bind(bookingExchange).to(messageExchange).with("booking.*");
+    }
+
 
     @Bean
     MessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory) {
@@ -92,12 +107,4 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
         return messageHandlerMethodFactory;
     }
 
-
-
-
-//    public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-//        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-//        return rabbitTemplate;
-//    }
 }

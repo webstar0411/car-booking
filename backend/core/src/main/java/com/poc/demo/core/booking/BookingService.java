@@ -1,13 +1,16 @@
 package com.poc.demo.core.booking;
 
 import com.poc.demo.core.waypoint.Waypoint;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class BookingService {
 
@@ -44,7 +47,12 @@ public class BookingService {
         return bookingRepository.count();
     }
 
-    public void delete(Long id) {
-        this.bookingRepository.deleteById(id);
+    public Optional<Object> delete(Long id) {
+        try {
+            this.bookingRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+        return Optional.of("Booking Deleted");
     }
 }
